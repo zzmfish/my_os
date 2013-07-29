@@ -1,7 +1,23 @@
     org 0x7c00
+BaseOfStack equ 0x7c00
+    jmp short LABEL_START
+    nop
+
+%include "fat12hdr.inc"
+
+LABEL_START:
     mov ax, cs
     mov ds, ax
     mov es, ax
+    mov ss, ax
+    mov sp, BaseOfStack
+
+    ;软驱复位
+    xor ah, ah
+    xor dl, dl
+    int 0x13
+
+    ;显示欢迎信息
     call DisplayMessage
     jmp $
 DisplayMessage:

@@ -12,23 +12,53 @@ LABEL_START:
     mov ss, ax
     mov sp, BaseOfStack
 
+    call Clear
+
+    mov ax, MessageBooting
+    mov bx, 11
+    call DisplayString
+    call NewLine
+
     ;软驱复位
-    xor ah, ah
     xor dl, dl
     int 0x13
 
+
+    ; 在A盘根目录寻找loader.bin
+    mov word [wSectorNo], SectorNoOfRootDir
+SEARCH_ROOT_DIR:
+    cmp word [wSectorNo], SectorNoOfRootDir + RootDirSectors
+    jz NO_LOADER
+
+    mov ax, word [wSectorNo]
+    call DisplayNumber
+    call NewLine
+
+    add word [wSectorNo], 1
+    jmp SEARCH_ROOT_DIR
+
+NO_LOADER:
     ;显示欢迎信息
-    call DisplayMessage
+    mov ax, MessageHello
+    mov bx, 16
+    call DisplayString
+
     jmp $
-DisplayMessage:
-    mov ax, Message
-    mov bp, ax
-    mov cx, 16
-    mov ax, 0x1301
-    mov bx, 0x000c
-    mov dl, 0
-    int 0x10
-    ret
-Message:  db "Hello, OS world!"
-times 510-($-$$) db 0
-dw 0xaa55
+
+;===============================================================================
+; 变量
+;-------------------------------------------------------------------------------
+wSectorNo               dw  0               ; 扇区号
+
+
+%include "display.asm"
+
+;===============================================================================
+; 字符串
+;-------------------------------------------------------------------------------
+MessageHello:  db   "Hello, OS world!"
+MessageBooting:db   "Booting ..."
+MessageDigit:  db   "0123456789"
+
+times 510-($-$$) db 0   ; 填充剩下的空间
+dw 0xaa55               ; 扇区结束标志

@@ -17,3 +17,8 @@ BS_BootSignature        DB 0x29             ; 扩展引导标记
 BS_VolumeID             DD 0                ; 卷序列号
 BS_VolumeLabel          DB 'MyOS1.0   '     ; 卷标
 BS_FileSystemType       DB 'FAT12   '       ; 文件系统类型
+
+
+;基于FAT12头的一些常量定义
+RootDirSectors          equ 14              ; 根目录占用的空间
+SectorNoOfRootDir       equ 19              ; 根目录的第一个扇区号

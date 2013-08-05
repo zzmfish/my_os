@@ -11,5 +11,5 @@ a.img: boot.bin
 	dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc
 
 boot.bin: boot/boot.asm boot/include/fat12hdr.inc
-	nasm -I boot/include/ boot/boot.asm -o boot.bin
+	nasm -I boot/ -I boot/include/ boot/boot.asm -o boot.bin
 

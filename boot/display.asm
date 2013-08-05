@@ -64,6 +64,27 @@ NewLine:
     ret
 
 ;=======
+; 清屏
+;-------
+Clear:
+    push ax
+    push bx
+    push cx
+    push dx
+    mov ax, 0x0600
+    mov bx, 0x0700
+    mov cx, 0
+    mov dx, 0x184f
+    int 0x10
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    ret
+
+
+
+;=======
 ; 变量
 ;-------
 bColumn                 db  0               ; 行号

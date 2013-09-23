@@ -4,6 +4,7 @@ BaseOfStack equ 0x7c00
     nop
 
 %include "fat12hdr.inc"
+%include "loader.inc"
 
 LABEL_START:
     mov ax, cs
@@ -34,6 +35,14 @@ SEARCH_ROOT_DIR:
     call DisplayNumber
     call NewLine
 
+    ;读入0扇区到0x9100
+    mov ax, LoaderBase
+    mov es, ax
+    mov bx, LoaderOffset
+    mov ax, [wSectorNo]
+    mov cl, 1
+    call ReadSector
+
     add word [wSectorNo], 1
     jmp SEARCH_ROOT_DIR
 
@@ -52,6 +61,7 @@ wSectorNo               dw  0               ; 扇区号
 
 
 %include "display.asm"
+%include "disk.asm"
 
 ;===============================================================================
 ; 字符串

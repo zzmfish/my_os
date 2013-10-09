@@ -36,12 +36,14 @@ SEARCH_ROOT_DIR:
     call NewLine
 
     ;读入0扇区到0x9100
+    push es
     mov ax, LoaderBase
     mov es, ax
     mov bx, LoaderOffset
     mov ax, [wSectorNo]
     mov cl, 1
     call ReadSector
+    pop es
 
     add word [wSectorNo], 1
     jmp SEARCH_ROOT_DIR

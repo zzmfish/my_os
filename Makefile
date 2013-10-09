@@ -10,6 +10,6 @@ a.img: boot.bin
 	mkfs.msdos -F 12 a.img
 	dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc
 
-boot.bin: boot/boot.asm boot/include/fat12hdr.inc
+boot.bin: boot/*.asm boot/include/fat12hdr.inc
 	nasm -I boot/ -I boot/include/ boot/boot.asm -o boot.bin
 

@@ -6,24 +6,23 @@
 DisplayNumber:
     ; 保存寄存器
     push bx
+    push dx
     ; 求个位数和更高位数
-    mov bl, 10
-    div bl
-    cmp al, 0
+    mov dx, 0   ; dx:ax是被除数，暂不使用dx
+    mov bx, 10  ; 被除数
+    div bx      ; dx:ax / bx ==> ax保存商，dx保存余数
+    cmp ax, 0   ; 商为0?
     je .displaydigit
     ; 显示更高位数
-    push ax
-    xor ah, ah
     call DisplayNumber
-    pop ax
 .displaydigit:
     ; 显示个位数
-    mov al, ah
-    xor ah, ah
+    mov ax, dx
     add ax, MessageDigit
     mov bx, 1
     call DisplayString
     ;恢复寄存器
+    pop dx
     pop bx
     ret
 
